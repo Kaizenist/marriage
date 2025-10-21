@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ankosha Banerjee – Digital Art Gallery</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #0d0d0d;
+      color: #f8f8f8;
+      overflow-x: hidden;
+    }
+
+    /* 🌸 Cherry blossom petals */
+    .petal {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle at center, #ffc0cb 0%, #ff80a0 70%, transparent 100%);
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: floatPetal 12s linear infinite;
+      transform-origin: center;
+      z-index: 5;
+    }
+
+    @keyframes floatPetal {
+      0% {
+        transform: translateY(0) rotate(0deg) scale(1);
+        opacity: 0.9;
+      }
+      50% {
+        transform: translateY(-50vh) rotate(180deg) scale(1.2);
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(360deg) scale(1);
+        opacity: 0;
+      }
+    }
+
+    /* 🌺 Intro Bloom Animation */
+    #intro {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 50;
+      overflow: hidden;
+      animation: introFade 6s ease-in-out forwards;
+    }
+
+    @keyframes introFade {
+      0%, 70% { opacity: 1; }
+      100% { opacity: 0; visibility: hidden; }
+    }
+
+    .intro-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      color: #ffd5e5;
+      text-shadow: 0 0 15px rgba(255,192,203,0.7);
+      animation: bloom 3s ease-in-out forwards;
+    }
+
+    @keyframes bloom {
+      0% { transform: scale(0.1) rotate(10deg); opacity: 0; }
+      50% { transform: scale(1.2) rotate(-5deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+
+    /* 🖼️ Gallery Layout */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem;
+      perspective: 1000px;
+    }
+
+    .art-card {
+      background: #1a1a1a;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      transform-style: preserve-3d;
+      position: relative;
+    }
+
+    .art-card:hover {
+      transform: rotateY(10deg) rotateX(5deg) scale(1.05);
+      box-shadow: 0 12px 25px rgba(255, 182, 193, 0.4);
+    }
+
+    .art-card img {
+      width: 100%;
+      height: auto;
+      border-bottom: 2px solid #ffb6c1;
+    }
+
+    .art-info {
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .art-info h3 {
+      font-family: 'Playfair Display', serif;
+      color: #ffd5e5;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .art-info p {
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+
+    /* 🌸 Treasure Icon */
+    .treasure {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.4rem;
+      color: #ffb6c1;
+      cursor: pointer;
+      animation: pulse 1.5s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); opacity: 0.8; }
+      to { transform: scale(1.2); opacity: 1; }
+    }
+
+    /* 🌟 Lightbox */
+    #lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 100;
+      backdrop-filter: blur(6px);
+    }
+
+    #lightbox img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 1rem;
+      box-shadow: 0 0 20px rgba(255,182,193,0.5);
+    }
+
+    .close-btn {
+      margin-top: 1rem;
+      background: #ffb6c1;
+      color: #000;
+      padding: 0.5rem 1.2rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .close-btn:hover {
+      background: #fff;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🌺 Intro Bloom -->
+  <div id="intro">
+    <div class="intro-title">Ankosha Banerjee – Digital Art Gallery</div>
+  </div>
+
+  <!-- 🌸 Floating petals -->
+  <div id="petals"></div>
+
+  <!-- 🖼️ Gallery -->
+  <main class="gallery" id="gallery"></main>
+
+  <!-- 💡 Lightbox -->
+  <div id="lightbox">
+    <img id="lightboxImg" src="" alt="">
+    <div class="close-btn" onclick="closeLightbox()">Close</div>
+  </div>
+
+  <script>
+    const artworks = [
+      { src: "https://i.imgur.com/q6Qn6oA.png", title: "Dreamscape Mosaic", desc: "A layered dream of vivid pigments and soft forms — a suspended moment where memory and fantasy braid together." },
+      { src: "https://i.imgur.com/DWMLUbM.png", title: "Whispering Timber", desc: "Quiet verticals and muted greens that evoke the hush of a forest at dusk — intimate, reflective, and mysterious." },
+      { src: "https://i.imgur.com/6793z3q.jpeg", title: "Luminous Reverie", desc: "Golden light pouring through fractured shapes — a meditation on glow, warmth, and the fleeting hour between day and night." },
+      { src: "https://i.imgur.com/7UBgfWm.jpeg", title: "Glass Horizon", desc: "Cool reflections and geometric planes sketch a far-off skyline — still and composed, suggesting distant journeys." },
+      { src: "https://i.imgur.com/eQjGFOC.jpeg", title: "Hidden Narratives", desc: "Intimate details hint at untold stories — textured layers invite the viewer to discover a personal tale." },
+      { src: "https://i.imgur.com/195ztuL.jpeg", title: "Celestial Bloom", desc: "Explosive, organic forms like galaxies flowering — balancing cosmic scale with tenderness of petals." },
+      { src: "https://i.imgur.com/vJHIMH6.jpeg", title: "Tidal Memory", desc: "Deep blues and flowing strokes capture the ocean’s rhythm — a contemplative piece about loss and return." },
+      { src: "https://i.imgur.com/CHxpq2X.jpeg", title: "Fragmented Reminiscence", desc: "Shards of color and form reconstruct a memory — tension between absence and presence gives it beauty." },
+      { src: "https://i.imgur.com/Erbvdpx.jpeg", title: "Radiant Passage", desc: "Bursts of light cut through darker fields, suggesting breakthroughs and hope emerging from shadow." },
+      { src: "https://i.imgur.com/tFLuIL1.jpeg", title: "Final Meridian", desc: "A quiet, expansive scene where horizons meet — the closing note of a visual journey, calm and conclusive." }
+    ];
+
+    const treasures = [
+      "This piece was inspired by a fleeting dream at dawn — where light met silence.",
+      "Ankosha painted this after a night spent watching falling blossoms in Kyoto.",
+      "A hidden layer beneath this digital work contains an earlier sketch — her signature motif lies there.",
+      "The hues here were sampled from real cherry petals collected in spring 2023.",
+      "Each stroke in this artwork mirrors a heartbeat — subtle, rhythmic, alive."
+    ];
+
+    const gallery = document.getElementById('gallery');
+    const petalsContainer = document.getElementById('petals');
+
+    // 🌸 Create petals
+    for (let i = 0; i < 20; i++) {
+      const petal = document.createElement('div');
+      petal.classList.add('petal');
+      petal.style.left = Math.random() * 100 + 'vw';
+      petal.style.animationDelay = Math.random() * 10 + 's';
+      petal.style.animationDuration = 10 + Math.random() * 10 + 's';
+      petalsContainer.appendChild(petal);
+    }
+
+    // 🖼️ Load artworks
+    artworks.forEach((art, i) => {
+      const card = document.createElement('div');
+      card.className = 'art-card';
+      card.innerHTML = `
+        <img src="${art.src}" alt="${art.title}" />
+        <div class="art-info">
+          <h3>${art.title}</h3>
+          <p>${art.desc}</p>
+        </div>
+      `;
+      // Random treasure icon
+      if (Math.random() < 0.25) {
+        const treasure = document.createElement('div');
+        treasure.className = 'treasure';
+        treasure.innerHTML = '🌸';
+        treasure.onclick = () => {
+          alert(treasures[Math.floor(Math.random() * treasures.length)]);
+        };
+        card.appendChild(treasure);
+      }
+      card.onclick = () => openLightbox(art.src);
+      gallery.appendChild(card);
+    });
+
+    // 🌺 Lightbox
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    function openLightbox(src) {
+      lightbox.style.display = 'flex';
+      lightboxImg.src = src;
+    }
+    function closeLightbox() {
+      lightbox.style.display = 'none';
+    }
+  </script>
+</body>
+</html>
